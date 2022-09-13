@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="d-flex justify-content-center">
+    <h1>Welcome!!</h1>
+</div>
+<div class="d-flex justify-content-center mx-5">
+    <table class="table table-hover table-striped bg-dark">
+        <thead class="">
+            <th>Username</th>
+            <th>Password</th>
+            <th>Role</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+            {% for data in datas %}
+              <tr class="bg-primary">
+                <td>{{data[1]}}</td>
+                <td>{{data[2]}}</td>
+                <td>{% if data[3] == 1 %} 
+                    Administrator
+                    {% elif data[3] == 2 %}
+                    User
+                    {% endif %}</td>
+                <td></td>
+              </tr>
+              {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="d-flex justify-content-center">
+    <a href="%" class="btn btn-outline-primary">Add user</a>
+</div>
+
+
+{% endblock %}
