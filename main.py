@@ -1,5 +1,4 @@
 from flask import Flask
-from flask import Flask
 from flask_jwt_extended import  JWTManager
 from flask_mysqldb import MySQL
 

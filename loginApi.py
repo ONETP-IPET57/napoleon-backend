@@ -1,12 +1,18 @@
+# Libraries
 from flask import Flask, render_template, request, redirect, url_for, flash, Blueprint, jsonify
 from flask_jwt_extended import create_access_token, JWTManager, get_jwt_identity, jwt_required, set_access_cookies, unset_jwt_cookies
+import hashlib
+
+# Moduls
 from querys import Query
 from main import jwt
 
-import hashlib
-
+# Init router
 loginApi = Blueprint('loginApi', __name__, template_folder='app/templates')
 
+# Routes of Login APIs
+
+# Login Route
 @loginApi.route("/api/login", methods=['POST'])
 def login():
     if request.method == 'POST':
@@ -35,13 +41,15 @@ def login():
                 "message": "User not found!" 
             }), 401
 
+
+# token in cookies
 @loginApi.route("/api/user", methods=['GET'])
 @jwt_required(locations='cookies')
 def user():
     current_user = get_jwt_identity()
     return jsonify(current_user), 200
 
-
+# SignUp Route
 @loginApi.route("/api/signup", methods=['POST'])
 def signup():
     if request.method == 'POST':
@@ -79,6 +87,7 @@ def signup():
                 "message": "Your username is registered"
             }), 401
 
+# Logout Route
 @loginApi.route("/api/logout", methods=['POST'])
 def logout():
     response = jsonify({"message": "Logout Successful"})

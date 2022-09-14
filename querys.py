@@ -1,7 +1,13 @@
 import time
 from main import mysql
 
+# Querys DataBase.
 class Query():
+
+    #-----------------------------
+    #|       Querys Login        |
+    #-----------------------------
+
     @classmethod
     def insert_user(self,username,password,email):
         try:
@@ -59,8 +65,9 @@ class Query():
         else: 
             return None
 
-# QUERYS MOD EXHIBITION
-
+    #------------------------------------
+    #|        Querys exhibition         |
+    #------------------------------------
     @classmethod
     def insert_exhibition(self, name_exhibition, author, created_at, information, image):
         try:
@@ -75,7 +82,7 @@ class Query():
     def update_exhibition(self, id, name_exhibition, author, created_at, information, image):
         try:
             cur=mysql.connection.cursor()
-            query="UPDATE exhibition SET (name_exhibition,author,created_at,information,image) VALUES('{}','{}',{},'{}','{}',) WHERE id_exhibition={}".format(name_exhibition, author, created_at, information, image,id)
+            query="UPDATE exhibition SET (name_exhibition,author,created_at,information,image) VALUES('{}','{}','{}','{}','{}',) WHERE id_exhibition={}".format(name_exhibition, author, created_at, information, image,id)
             cur.execute(query)
             return {'message': 'Updated Successfully'}
         except Exception as e:
