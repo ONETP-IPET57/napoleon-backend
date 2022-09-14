@@ -4,6 +4,7 @@ from flask_mysqldb import MySQL
 from flask_jwt_extended import create_access_token, JWTManager, get_jwt_identity, jwt_required, set_access_cookies, unset_jwt_cookies
 
 from querys import Query
+from loginApi import loginApi
 import hashlib
 
 app = Flask(__name__)
@@ -30,6 +31,8 @@ def login_page():
 @app.route('/signup')
 def signup_page():
     return render_template('signup.html')
+
+app.register_blueprint(loginApi)
 
 if __name__ == "__main__":
     app.run(debug=True)

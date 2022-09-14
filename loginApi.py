@@ -55,7 +55,7 @@ def signup():
                 
                 print(userData)
                 access_token = create_access_token(identity={
-                    'user': userData[0],
+                    'username': userData[0],
                     'email': userData[2],
                     'role': userData[3],
                 })
