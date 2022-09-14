@@ -41,9 +41,9 @@ def guided_tour(id):
             'day': tourDate[5]
         })
 
-@visitsApi.route('/api/visit', methods=['POST','DELETE'])
+@visitsApi.route('/api/visit/<id>', methods=['POST','DELETE'])
 @jwt_required(locations='cookies')
-def visit():
+def visit(id):
     id_user = get_jwt_identity()['id_user']
     if id_user == None:
         return jsonify({'message': 'Not user logged'}), 403
@@ -54,7 +54,7 @@ def visit():
         return jsonify(Query.insert_visit(id_guided_tours, id_user, reference_name)), 200
 
     if request.method == 'DELETE':
-        return jsonify(Query.delete_visit)
+        return jsonify(Query.delete_visit(id))
 
 @visitsApi.route('/api/user/visits', methods=['GET'])
 @jwt_required(locations='cookies')
@@ -69,7 +69,7 @@ def user_visits():
 
         for data in dataUserVisit:
             jsonUserVisit.append({
-                'id_guided_tours': data[0],
+                'id_visit': data[0],
                 'name_guided_tours': data[1],
                 'description': data[2],
                 'reference_name': data[3]

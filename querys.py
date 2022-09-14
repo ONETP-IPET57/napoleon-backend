@@ -151,7 +151,7 @@ class Query():
     @classmethod
     def fetch_all_visit(self, id):
         cur=mysql.connection.cursor()
-        query="SELECT gd.id_guided_tours gd.name_guided_tours, gd.description , vs.reference_name FROM `visit` vs INNER JOIN `guided_tours` gd ON vs.id_guided_tours = gd.id_guided_tours INNER JOIN `user` u ON vs.id_user = u.id_user WHERE vs.id_user ={}".format(id)
+        query="SELECT vs.id_visit, gd.name_guided_tours, gd.description , vs.reference_name FROM `visit` vs INNER JOIN `guided_tours` gd ON vs.id_guided_tours = gd.id_guided_tours INNER JOIN `user` u ON vs.id_user = u.id_user WHERE vs.id_user ={}".format(id)
         cur.execute(query)
         data = cur.fetchall()
         return data
