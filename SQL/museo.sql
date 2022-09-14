@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-09-2022 a las 01:20:45
+-- Tiempo de generación: 15-09-2022 a las 00:28:53
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.1.28
 
@@ -25,26 +25,13 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `author`
---
-
-CREATE TABLE `author` (
-  `id_author` int(11) NOT NULL,
-  `name` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `lastname` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `date_birth` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `exhibition`
 --
 
 CREATE TABLE `exhibition` (
   `id_exhibition` int(11) NOT NULL,
   `name_exhibition` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `id_author` int(11) NOT NULL,
+  `author` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
   `information` text COLLATE utf8_unicode_ci NOT NULL,
   `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL
@@ -58,10 +45,17 @@ CREATE TABLE `exhibition` (
 
 CREATE TABLE `guided_tours` (
   `id_guided_tours` int(11) NOT NULL,
-  `name_guided_tours` int(11) NOT NULL,
+  `name_guided_tours` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `id_schedule` int(11) NOT NULL,
-  `description` int(11) NOT NULL
+  `description` text COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `guided_tours`
+--
+
+INSERT INTO `guided_tours` (`id_guided_tours`, `name_guided_tours`, `id_schedule`, `description`) VALUES
+(1, 'Welcome tour', 1, 'Description tour');
 
 -- --------------------------------------------------------
 
@@ -109,17 +103,12 @@ CREATE TABLE `schedule` (
   `days` varchar(255) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `turn`
+-- Volcado de datos para la tabla `schedule`
 --
 
-CREATE TABLE `turn` (
-  `id_turn` int(11) NOT NULL,
-  `id_guided_tours` int(11) NOT NULL,
-  `date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+INSERT INTO `schedule` (`id_schedule`, `hour_start`, `hour_end`, `days`) VALUES
+(1, '10:30:00', '12:00:00', 'Monday');
 
 -- --------------------------------------------------------
 
@@ -130,7 +119,8 @@ CREATE TABLE `turn` (
 CREATE TABLE `user` (
   `id_user` int(11) NOT NULL,
   `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `password` char(65) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `id_role` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -138,8 +128,13 @@ CREATE TABLE `user` (
 -- Volcado de datos para la tabla `user`
 --
 
-INSERT INTO `user` (`id_user`, `username`, `password`, `id_role`) VALUES
-(1, 'root', '1234', 1);
+INSERT INTO `user` (`id_user`, `username`, `password`, `email`, `id_role`) VALUES
+(1, 'root', '1234', '', 1),
+(3, 'Thejairex', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'yairjesus777@gmail.com', 2),
+(4, 'Zenithv53', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'Claumont2011@live.com.ar', 2),
+(5, 'Jair', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'jair@live.com.ar', 2),
+(6, 'Jair2', 'd4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35', 'jair2@live.com.ar', 2),
+(7, 'Tikki', 'd4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35', 'Tikki@live.com.ar', 2);
 
 -- --------------------------------------------------------
 
@@ -149,27 +144,27 @@ INSERT INTO `user` (`id_user`, `username`, `password`, `id_role`) VALUES
 
 CREATE TABLE `visit` (
   `id_visit` int(11) NOT NULL,
+  `id_guided_tours` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
-  `id_turn` int(11) NOT NULL,
-  `reference_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+  `reference_name` varchar(200) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `visit`
+--
+
+INSERT INTO `visit` (`id_visit`, `id_guided_tours`, `id_user`, `reference_name`) VALUES
+(1, 1, 3, 'suiogb');
 
 --
 -- Índices para tablas volcadas
 --
 
 --
--- Indices de la tabla `author`
---
-ALTER TABLE `author`
-  ADD PRIMARY KEY (`id_author`);
-
---
 -- Indices de la tabla `exhibition`
 --
 ALTER TABLE `exhibition`
-  ADD PRIMARY KEY (`id_exhibition`),
-  ADD KEY `id_author` (`id_author`);
+  ADD PRIMARY KEY (`id_exhibition`);
 
 --
 -- Indices de la tabla `guided_tours`
@@ -199,13 +194,6 @@ ALTER TABLE `schedule`
   ADD PRIMARY KEY (`id_schedule`);
 
 --
--- Indices de la tabla `turn`
---
-ALTER TABLE `turn`
-  ADD PRIMARY KEY (`id_turn`),
-  ADD KEY `id_guided_tours` (`id_guided_tours`);
-
---
 -- Indices de la tabla `user`
 --
 ALTER TABLE `user`
@@ -217,18 +205,12 @@ ALTER TABLE `user`
 --
 ALTER TABLE `visit`
   ADD PRIMARY KEY (`id_visit`),
-  ADD KEY `id_user` (`id_user`),
-  ADD KEY `id_turn` (`id_turn`);
+  ADD KEY `id_guided_tours` (`id_guided_tours`),
+  ADD KEY `id_user` (`id_user`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
-
---
--- AUTO_INCREMENT de la tabla `author`
---
-ALTER TABLE `author`
-  MODIFY `id_author` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `exhibition`
@@ -240,7 +222,7 @@ ALTER TABLE `exhibition`
 -- AUTO_INCREMENT de la tabla `guided_tours`
 --
 ALTER TABLE `guided_tours`
-  MODIFY `id_guided_tours` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_guided_tours` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `review`
@@ -258,35 +240,23 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT de la tabla `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `id_schedule` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `turn`
---
-ALTER TABLE `turn`
-  MODIFY `id_turn` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_schedule` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `visit`
 --
 ALTER TABLE `visit`
-  MODIFY `id_visit` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_visit` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
 --
-
---
--- Filtros para la tabla `exhibition`
---
-ALTER TABLE `exhibition`
-  ADD CONSTRAINT `exhibition_ibfk_1` FOREIGN KEY (`id_author`) REFERENCES `author` (`id_author`);
 
 --
 -- Filtros para la tabla `guided_tours`
@@ -302,12 +272,6 @@ ALTER TABLE `review`
   ADD CONSTRAINT `review_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
 
 --
--- Filtros para la tabla `turn`
---
-ALTER TABLE `turn`
-  ADD CONSTRAINT `turn_ibfk_1` FOREIGN KEY (`id_guided_tours`) REFERENCES `guided_tours` (`id_guided_tours`);
-
---
 -- Filtros para la tabla `user`
 --
 ALTER TABLE `user`
@@ -317,8 +281,8 @@ ALTER TABLE `user`
 -- Filtros para la tabla `visit`
 --
 ALTER TABLE `visit`
-  ADD CONSTRAINT `visit_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`),
-  ADD CONSTRAINT `visit_ibfk_2` FOREIGN KEY (`id_turn`) REFERENCES `turn` (`id_turn`);
+  ADD CONSTRAINT `visit_ibfk_1` FOREIGN KEY (`id_guided_tours`) REFERENCES `guided_tours` (`id_guided_tours`),
+  ADD CONSTRAINT `visit_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
