@@ -143,7 +143,7 @@ def signup():
                 "message": "Your username is registered"
             }), 401
 
-@app.route("/api/logout")
+@app.route("/api/logout", methods=['POST'])
 def logout():
     response = jsonify({"message": "Logout Successful"})
     unset_jwt_cookies(response)
