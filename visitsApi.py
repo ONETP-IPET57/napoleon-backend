@@ -69,9 +69,10 @@ def user_visits():
 
         for data in dataUserVisit:
             jsonUserVisit.append({
-                'name_guided_tours': data[0],
-                'description': data[1],
-                'reference_name': data[2]
+                'id_guided_tours': data[0],
+                'name_guided_tours': data[1],
+                'description': data[2],
+                'reference_name': data[3]
             })
 
     return jsonify(jsonUserVisit)
