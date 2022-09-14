@@ -72,7 +72,7 @@ class Query():
     def insert_exhibition(self, name_exhibition, author, created_at, information, image):
         try:
             cur=mysql.connection.cursor()
-            query="INSERT INTO exhibition (name_exhibition,author,created_at,information,image) VALUES('{}','{}',{},'{}','{}',)".format(name_exhibition, author, created_at, information, image)
+            query="INSERT INTO exhibition (name_exhibition,author,created_at,information,image) VALUES('{}','{}','{}','{}','{}')".format(name_exhibition, author, created_at, information, image)
             cur.execute(query)
             mysql.connection.commit()
             return {'message': 'Added Successfully'}
@@ -109,6 +109,7 @@ class Query():
     @classmethod
     def delete_exhibition(self, id):
         cur=mysql.connection.cursor()
-        query="DELETE FROM exhibition WHERE id={}".format(id)
+        query="DELETE FROM exhibition WHERE id_exhibition={}".format(id)
         cur.execute(query)
+        mysql.connection.commit()
         return {'message': 'Delete Successfully'}
