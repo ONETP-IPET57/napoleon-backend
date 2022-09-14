@@ -16,11 +16,11 @@ class Query():
             cur.execute(query)
             mysql.connection.commit()
             time.sleep(2.4)
-            query="SELECT u.username, u.password, u.email, r.role FROM user u INNER JOIN role r on u.id_role = r.id_role WHERE u.username='{}'".format(username)
+            query="SELECT u.id_user, u.username, u.password, u.email, r.role FROM user u INNER JOIN role r on u.id_role = r.id_role WHERE u.username='{}'".format(username)
             cur.execute(query)
             data=cur.fetchone()
             print(data)
-            if data[1] == password:
+            if data[2] == password:
                 return data
             else: 
                 return None
@@ -58,9 +58,9 @@ class Query():
         cur=mysql.connection.cursor()
         query="SELECT u.id_user, u.username, u.password, u.email, r.role FROM user u INNER JOIN role r on u.id_role = r.id_role WHERE u.username='{}'".format(username)
         cur.execute(query)
-        cur.commit
+        mysql.connection.commit()
         data=cur.fetchone()
-        if data[1] == password:
+        if data[2] == password:
             return data
         else: 
             return None
@@ -150,4 +150,8 @@ class Query():
 
     @classmethod
     def fetch_all_visit(self, id):
-        pass
+        cur=mysql.connection.cursor()
+        query="SELECT gd.name_guided_tours, gd.description , vs.reference_name FROM `visit` vs INNER JOIN `guided_tours` gd ON vs.id_guided_tours = gd.id_guided_tours INNER JOIN `user` u ON vs.id_user = u.id_user WHERE vs.id_user ={}".format(id)
+        cur.execute(query)
+        data = cur.fetchall()
+        return data

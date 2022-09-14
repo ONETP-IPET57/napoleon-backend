@@ -90,7 +90,17 @@ def user_visits():
         return jsonify({'message': 'Not user logged'}), 403
 
     if request.method == 'GET':
-        pass
+        dataUserVisit = Query.fetch_all_visit()
+        jsonUserVisit = []
+
+        for data in dataUserVisit:
+            jsonUserVisit.append({
+                'name_guided_tours': data[0],
+                'description': data[1],
+                'reference_name': data[2]
+            })
+
+    return jsonify(jsonUserVisit)
 
 
         

@@ -72,9 +72,9 @@ def signup():
 
                 response = jsonify({
                     'accessToken': access_token,
-                    'username': userData[0],
-                    'email': userData[2],
-                    'role': userData[3],
+                    'username': userData[1],
+                    'email': userData[3],
+                    'role': userData[4],
                 })
 
                 set_access_cookies(response, access_token)
