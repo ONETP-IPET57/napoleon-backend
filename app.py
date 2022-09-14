@@ -1,4 +1,5 @@
 import time
+#from urllib import response
 from flask import Flask, render_template, request, redirect, url_for, flash, Blueprint, jsonify
 from flask_mysqldb import MySQL
 from flask_jwt_extended import create_access_token, JWTManager, get_jwt_identity, jwt_required, set_access_cookies, unset_jwt_cookies
@@ -143,7 +144,7 @@ def signup():
                 "message": "Your username is registered"
             }), 401
 
-@app.route("/api/logout", methods=['POST'])
+@app.route("/api/logout")
 def logout():
     response = jsonify({"message": "Logout Successful"})
     unset_jwt_cookies(response)
