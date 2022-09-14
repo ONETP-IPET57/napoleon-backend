@@ -2,7 +2,7 @@ from multiprocessing.dummy import current_process
 import time
 from flask import Flask, render_template, request, redirect, url_for, flash, Blueprint, jsonify
 from flask_mysqldb import MySQL
-from flask_jwt_extended import create_access_token, JWTManager, get_jwt_identity, jwt_required
+from flask_jwt_extended import create_access_token, JWTManager, get_jwt_identity, jwt_required, set_access_cookies, unset_jwt_cookies
 
 import hashlib
 
@@ -52,16 +52,15 @@ def fetch_user_login(username,password):
     else: 
         return None
 
-
-
-
 app = Flask(__name__)
-
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'museo'
+app.config["JWT_TOKEN_LOCATION"] = ["headers", "cookies", "json", "query_string"]
+app.config["JWT_COOKIE_SECURE"] = False
+
 app.config["JWT_SECRET_KEY"] = "TikkiX2"
 
 jwt = JWTManager(app)
@@ -83,17 +82,18 @@ def login():
         password = hashlib.sha256(password.encode('utf-8')).hexdigest()
         userData= fetch_user_login(username, password)
         if userData != None:
+            response = jsonify({
+                'user': userData[0],
+                'email': userData[2],
+                'role': userData[3],
+            })
             access_token = create_access_token(identity=jsonify({
                 'user': userData[0],
                 'email': userData[2],
                 'role': userData[3],
             }))
-            return jsonify({
-                'access_token': access_token,
-                'user': userData[0],
-                'email': userData[2],
-                'role': userData[3],
-            })
+            set_access_cookies(response, access_token)
+            return response
         else:
             return jsonify({
                 "message": "User not found!" 
@@ -116,23 +116,23 @@ def signup():
         if fetch_user_signup(username=username, email=None):
             if fetch_user_signup(username=None, email=email):
                 userData= insert_user(username,password,email)
-                print(userData)
+                response = jsonify({
+                    'user': userData[0],
+                    'email': userData[2],
+                    'role': userData[3],
+                })
                 access_token = create_access_token(identity=jsonify({
                     'user': userData[0],
                     'email': userData[2],
                     'role': userData[3],
                 }))
-                return jsonify({
-                    'access_token': access_token,
-                    'user': userData[0],
-                    'email': userData[2],
-                    'role': userData[3],
-                })
+                set_access_cookies(response, access_token)
+                return response
 
             else:
                 return jsonify({
                 "message": "Your email is registered"
-            })
+            }), 401
         else:
             return jsonify({
                 "message": "Your username is registered"

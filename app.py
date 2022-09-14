@@ -1,19 +1,19 @@
-from multiprocessing.dummy import current_process
 import time
+from urllib import response
 from flask import Flask, render_template, request, redirect, url_for, flash, Blueprint, jsonify
 from flask_mysqldb import MySQL
-from flask_jwt_extended import create_access_token, JWTManager, get_jwt_identity, jwt_required
+from flask_jwt_extended import create_access_token, JWTManager, get_jwt_identity, jwt_required, set_access_cookies, unset_jwt_cookies
 
 import hashlib
 
 def insert_user(username,password,email):
     try:
         cur=mysql.connection.cursor()
-        query="INSERT INTO user (username,password,email,id_role) VALUES('{}','{}','{}',2)".json.getat(username,password,email)
+        query="INSERT INTO user (username,password,email,id_role) VALUES('{}','{}','{}',2)".format(username,password,email)
         cur.execute(query)
         mysql.connection.commit()
         time.sleep(2.4)
-        query="SELECT u.username, u.password, u.email, r.role FROM user u INNER JOIN role r on u.id_role = r.id_role WHERE u.username='{}'".json.getat(username)
+        query="SELECT u.username, u.password, u.email, r.role FROM user u INNER JOIN role r on u.id_role = r.id_role WHERE u.username='{}'".format(username)
         cur.execute(query)
         data=cur.fetchone()
         print(data)
@@ -83,23 +83,24 @@ def login():
         password = hashlib.sha256(password.encode('utf-8')).hexdigest()
         userData= fetch_user_login(username, password)
         if userData != None:
+            response = jsonify({
+                    'user': userData[0],
+                    'email': userData[2],
+                    'role': userData[3],
+                })
             access_token = create_access_token(identity=jsonify({
                 'user': userData[0],
                 'email': userData[2],
                 'role': userData[3],
             }))
-            return jsonify({
-                'access_token': access_token,
-                'user': userData[0],
-                'email': userData[2],
-                'role': userData[3],
-            })
+            set_access_cookies(response, access_token)
+            return response
         else:
             return jsonify({
                 "message": "User not found!" 
             }), 401
 
-@app.route("/user", methods=['GET'])
+@app.route("/api/user", methods=['GET'])
 @jwt_required()
 def user():
     current_user = get_jwt_identity
@@ -116,18 +117,19 @@ def signup():
         if fetch_user_signup(username=username, email=None):
             if fetch_user_signup(username=None, email=email):
                 userData= insert_user(username,password,email)
+                response = jsonify({
+                    'user': userData[0],
+                    'email': userData[2],
+                    'role': userData[3],
+                })
                 print(userData)
                 access_token = create_access_token(identity=jsonify({
                     'user': userData[0],
                     'email': userData[2],
                     'role': userData[3],
                 }))
-                return jsonify({
-                    'access_token': access_token,
-                    'user': userData[0],
-                    'email': userData[2],
-                    'role': userData[3],
-                })
+                set_access_cookies(response, access_token)
+                return response
 
             else:
                 return jsonify({
