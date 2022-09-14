@@ -1,4 +1,3 @@
-from crypt import methods
 import randomname
 from flask import Flask, render_template, jsonify,request
 from flask_mysqldb import MySQL
