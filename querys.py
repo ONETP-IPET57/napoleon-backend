@@ -58,8 +58,8 @@ class Query():
         cur=mysql.connection.cursor()
         query="SELECT u.username, u.password, u.email, r.role FROM user u INNER JOIN role r on u.id_role = r.id_role WHERE u.username='{}'".format(username)
         cur.execute(query)
+        cur.commit
         data=cur.fetchone()
-        print(data)
         if data[1] == password:
             return data
         else: 
@@ -74,6 +74,7 @@ class Query():
             cur=mysql.connection.cursor()
             query="INSERT INTO exhibition (name_exhibition,author,created_at,information,image) VALUES('{}','{}',{},'{}','{}',)".format(name_exhibition, author, created_at, information, image)
             cur.execute(query)
+            mysql.connection.commit()
             return {'message': 'Added Successfully'}
         except Exception as e:
             return str(e)
@@ -82,8 +83,9 @@ class Query():
     def update_exhibition(self, id, name_exhibition, author, created_at, information, image):
         try:
             cur=mysql.connection.cursor()
-            query="UPDATE exhibition SET (name_exhibition,author,created_at,information,image) VALUES('{}','{}','{}','{}','{}',) WHERE id_exhibition={}".format(name_exhibition, author, created_at, information, image,id)
+            query="UPDATE exhibition SET name_exhibition = '{}', author = '{}', created_at = '{}', information = '{}', image = '{}' WHERE exhibition.id_exhibition={}".format(name_exhibition, author, created_at, information, image,id)
             cur.execute(query)
+            mysql.connection.commit()
             return {'message': 'Updated Successfully'}
         except Exception as e:
             return str(e)
