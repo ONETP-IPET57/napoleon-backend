@@ -100,7 +100,7 @@ def login():
             }), 401
 
 @app.route("/api/user", methods=['GET'])
-@jwt_required()
+@jwt_required(locations='cookies')
 def user():
     current_user = get_jwt_identity()
     return jsonify(current_user), 200
