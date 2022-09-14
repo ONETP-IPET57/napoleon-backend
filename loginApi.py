@@ -23,9 +23,10 @@ def login():
         if userData != None:
             
             access_token = create_access_token(identity={
-                'username': userData[0],
-                'email': userData[2],
-                'role': userData[3],
+                'id_user': userData[0],
+                'username': userData[1],
+                'email': userData[3],
+                'role': userData[4],
             })
 
             response = jsonify({
@@ -63,9 +64,10 @@ def signup():
                 
                 print(userData)
                 access_token = create_access_token(identity={
-                    'username': userData[0],
-                    'email': userData[2],
-                    'role': userData[3],
+                    'id_user': userData[0],
+                    'username': userData[1],
+                    'email': userData[3],
+                    'role': userData[4],
                 })
 
                 response = jsonify({

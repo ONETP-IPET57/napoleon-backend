@@ -41,10 +41,10 @@ class Query():
         cur=mysql.connection.cursor()
 
         if username != None:
-            query="SELECT u.email, u.password, u.email, r.role FROM user u INNER JOIN role r on u.id_role = r.id_role WHERE u.username='{}'".format(username)
+            query="SELECT u.id_user, u.username, u.password, u.email, r.role FROM user u INNER JOIN role r on u.id_role = r.id_role WHERE u.username='{}'".format(username)
 
         elif email != None:
-            query="SELECT u.email, u.password, u.email, r.role FROM user u INNER JOIN role r on u.id_role = r.id_role WHERE u.email='{}'".format(email)
+            query="SELECT u.id_user, u.username, u.password, u.email, r.role FROM user u INNER JOIN role r on u.id_role = r.id_role WHERE u.email='{}'".format(email)
 
         cur.execute(query)
         data=cur.fetchone()
@@ -56,7 +56,7 @@ class Query():
     @classmethod
     def fetch_user_login(self, username,password):
         cur=mysql.connection.cursor()
-        query="SELECT u.username, u.password, u.email, r.role FROM user u INNER JOIN role r on u.id_role = r.id_role WHERE u.username='{}'".format(username)
+        query="SELECT u.id_user, u.username, u.password, u.email, r.role FROM user u INNER JOIN role r on u.id_role = r.id_role WHERE u.username='{}'".format(username)
         cur.execute(query)
         cur.commit
         data=cur.fetchone()
@@ -113,3 +113,41 @@ class Query():
         cur.execute(query)
         mysql.connection.commit()
         return {'message': 'Delete Successfully'}
+
+# guided tours query
+
+    @classmethod
+    def fetch_all_guided_tours(self):
+        cur=mysql.connection.cursor()
+        query="SELECT gd.id_guided_tours, gd.name_guided_tours, gd.description, sc.hour_start, sc.hour_end, sc.days FROM `guided_tours` gd INNER JOIN `schedule` sc ON gd.id_schedule = sc.id_schedule"
+        cur.execute(query)
+        data = cur.fetchall()
+        return data
+
+    @classmethod
+    def fetch_guided_tour(self, id):
+        cur=mysql.connection.cursor()
+        query="SELECT gd.id_guided_tours, gd.name_guided_tours, gd.description, sc.hour_start, sc.hour_end, sc.days FROM `guided_tours` gd INNER JOIN `schedule` sc ON gd.id_schedule = sc.id_schedule WHERE id_guided_tours = {}".format(id)
+        cur.execute(query)
+        data = cur.fetchone()
+        return data
+
+    @classmethod
+    def insert_visit(self,id_guided_tours, id_user, date, reference_name):
+        cur=mysql.connection.cursor()
+        query="INSERT INTO visit (id_guided_tours,id_user,date,reference_name) VALUES({},{},'{}','{}')".format(id_guided_tours, id_user, date, reference_name)
+        cur.execute(query)
+        mysql.connection.commit()
+        return {'message': 'Added Successfully'}
+
+    @classmethod
+    def delete_visit(self, id):
+        cur=mysql.connection.cursor()
+        query="DELETE FROM visit WHERE id_visit={}".format(id)
+        cur.execute(query)
+        mysql.connection.commit()
+        return {'message': 'Delete Successfully'}
+
+    @classmethod
+    def fetch_all_visit(self, id):
+        pass
