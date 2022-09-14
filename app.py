@@ -88,11 +88,11 @@ def login():
                     'email': userData[2],
                     'role': userData[3],
                 })
-            access_token = create_access_token(identity=jsonify({
+            access_token = create_access_token(identity={
                 'user': userData[0],
                 'email': userData[2],
                 'role': userData[3],
-            }))
+            })
             set_access_cookies(response, access_token)
             return response
         else:
@@ -123,11 +123,11 @@ def signup():
                     'role': userData[3],
                 })
                 print(userData)
-                access_token = create_access_token(identity=jsonify({
+                access_token = create_access_token(identity={
                     'user': userData[0],
                     'email': userData[2],
                     'role': userData[3],
-                }))
+                })
                 set_access_cookies(response, access_token)
                 return response
 
