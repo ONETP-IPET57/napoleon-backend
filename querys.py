@@ -133,9 +133,9 @@ class Query():
         return data
 
     @classmethod
-    def insert_visit(self,id_guided_tours, id_user, date, reference_name):
+    def insert_visit(self,id_guided_tours, id_user, reference_name):
         cur=mysql.connection.cursor()
-        query="INSERT INTO visit (id_guided_tours,id_user,date,reference_name) VALUES({},{},'{}','{}')".format(id_guided_tours, id_user, date, reference_name)
+        query="INSERT INTO visit (id_guided_tours,id_user,reference_name) VALUES({},{},'{}')".format(id_guided_tours, id_user, reference_name)
         cur.execute(query)
         mysql.connection.commit()
         return {'message': 'Added Successfully'}
