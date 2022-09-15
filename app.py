@@ -1,4 +1,3 @@
-from fileinput import filename
 from flask import Flask, render_template, jsonify,request, redirect, url_for, send_from_directory
 from flask_mysqldb import MySQL
 from flask_jwt_extended import  JWTManager, jwt_required, get_jwt_identity
