@@ -114,7 +114,9 @@ class Query():
         mysql.connection.commit()
         return {'message': 'Delete Successfully'}
 
-# guided tours query
+    #------------------------------------
+    #|        Querys Guided Tours       |
+    #------------------------------------
 
     @classmethod
     def fetch_all_guided_tours(self):
@@ -155,3 +157,42 @@ class Query():
         cur.execute(query)
         data = cur.fetchall()
         return data
+
+    #------------------------------------
+    #|        Querys review             |
+    #------------------------------------
+
+    @classmethod
+    def fetch_all_review(self, id):
+        cur=mysql.connection.cursor()
+        query="SELECT r.id_review, u.username, r.score, r.message FROM review r INNER JOIN user u ON r.id_user = u.id_user INNER JOIN exhibition e ON e.id_exhibition = {}}".format(id)
+        cur.execute(query)
+        data = cur.fetchall()
+        return data
+
+    @classmethod
+    def update_review(self, score, message, id):
+        try:
+            cur=mysql.connection.cursor()
+            query="UPDATE review SET score={}, message='{}' WHERE id_review={}".format(score, message, id)
+            cur.execute(query)
+            mysql.connection.commit()
+            return {'message': 'Updated Successfully'}
+        except Exception as e:
+            return str(e)
+
+    @classmethod
+    def insert_review(self, id, id_user, score, message):
+        cur=mysql.connection.cursor()
+        query="INSERT INTO review (id_exhibition, id_user, score, message VALUES ({},{},{},'{}'))".format(id, id_user, score, message)
+        cur.execute(query)
+        mysql.connection.commit()
+        return {'message': 'Added Successfully'}
+
+    @classmethod
+    def delete_review(self, id):
+        cur=mysql.connection.cursor()
+        query="DELETE FROM review WHERE id_review={}".format(id)
+        cur.execute(query)
+        mysql.connection.commit()
+        return {'message': 'Delete Successfully'}
