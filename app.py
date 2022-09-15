@@ -7,6 +7,7 @@ from querys import Query
 from loginApi import loginApi
 from visitsApi import visitsApi
 from exhibitionApi import exhibitionApi
+from reviewApi import reviewApi
 
 app = Flask(__name__ , static_url_path='')
 # Config mysql
@@ -38,6 +39,7 @@ def signup_page():
    
 # APIs
 app.register_blueprint(visitsApi)
+app.register_blueprint(reviewApi)
 app.register_blueprint(loginApi)
 app.register_blueprint(exhibitionApi)
 
