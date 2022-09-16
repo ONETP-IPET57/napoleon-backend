@@ -42,7 +42,7 @@ def guided_tour(id):
         })
 
 @visitsApi.route('/api/visit/<id>', methods=['POST','DELETE'])
-@jwt_required(locations='cookies')
+@jwt_required(locations=['cookies','headers'])
 def visit(id):
     id_user = get_jwt_identity()['id_user']
     if id_user == None:
@@ -57,7 +57,7 @@ def visit(id):
         return jsonify(Query.delete_visit(id))
 
 @visitsApi.route('/api/user/visits', methods=['GET'])
-@jwt_required(locations='cookies')
+@jwt_required(locations=['cookies','headers'])
 def user_visits():
     id_user = get_jwt_identity()['id_user']
     if id_user == None:

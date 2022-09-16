@@ -31,7 +31,7 @@ def exhibitions():
 
 # Fetch one exhibition for to work
 @exhibitionApi.route('/api/exhibition/<id>', methods=['POST','GET','DELETE'])
-@jwt_required(locations='cookies')
+@jwt_required(locations=['cookies','headers'])
 def exhibition(id):
     if get_jwt_identity()['role'] != 'administrator':
         return jsonify({'message': 'Not authorized'}), 403

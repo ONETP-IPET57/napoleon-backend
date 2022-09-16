@@ -45,7 +45,7 @@ def login():
 
 # token in cookies
 @loginApi.route("/api/user", methods=['GET'])
-@jwt_required(locations='cookies')
+@jwt_required(locations=['cookies','headers'])
 def user():
     current_user = get_jwt_identity()
     return jsonify(current_user), 200
