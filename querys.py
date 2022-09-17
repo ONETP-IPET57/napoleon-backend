@@ -22,7 +22,7 @@ class Query():
             print(data)
             if data[2] == password:
                 return data
-            else: 
+            else:
                 return None
         except Exception as e:
             return str(e)
@@ -60,9 +60,12 @@ class Query():
         cur.execute(query)
         mysql.connection.commit()
         data=cur.fetchone()
-        if data[2] == password:
-            return data
-        else: 
+        if data != None:
+            if data[2] == password:
+                return data
+            else:
+                return None
+        else:
             return None
 
     #------------------------------------
@@ -80,10 +83,10 @@ class Query():
             return str(e)
 
     @classmethod
-    def update_exhibition(self, id, name_exhibition, author, created_at, information, image):
+    def update_exhibition(self, id, name_exhibition, author, created_at, information, image, beepcons):
         try:
             cur=mysql.connection.cursor()
-            query="UPDATE exhibition SET name_exhibition = '{}', author = '{}', created_at = '{}', information = '{}', image = '{}' WHERE exhibition.id_exhibition={}".format(name_exhibition, author, created_at, information, image,id)
+            query="UPDATE exhibition SET name_exhibition = '{}', author = '{}', created_at = '{}', information = '{}', image = '{}', beepcons={} WHERE exhibition.id_exhibition={}".format(name_exhibition, author, created_at, information, image, beepcons,id)
             cur.execute(query)
             mysql.connection.commit()
             return {'message': 'Updated Successfully'}

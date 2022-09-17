@@ -9,12 +9,12 @@ from visitsApi import visitsApi
 from exhibitionApi import exhibitionApi
 from reviewApi import reviewApi
 
-app = Flask(__name__ , static_url_path='')
+app = Flask(__name__)
 # Config mysql
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'museo'
+app.config['MYSQL_HOST'] = 'Thejairex.mysql.pythonanywhere-services.com'
+app.config['MYSQL_USER'] = 'Thejairex'
+app.config['MYSQL_PASSWORD'] = 'aiwa2015'
+app.config['MYSQL_DB'] = 'Thejairex$museo'
 app.config["JWT_SECRET_KEY"] = "TikkiX2"
 
 # Inits
@@ -36,7 +36,7 @@ def login_page():
 def signup_page():
     return render_template('signup.html')
 
-   
+
 # APIs
 app.register_blueprint(visitsApi)
 app.register_blueprint(reviewApi)

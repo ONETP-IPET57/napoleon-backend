@@ -21,7 +21,7 @@ def login():
         password = hashlib.sha256(password.encode('utf-8')).hexdigest()
         userData= Query.fetch_user_login(username, password)
         if userData != None:
-            
+
             access_token = create_access_token(identity={
                 'id_user': userData[0],
                 'username': userData[1],
@@ -39,13 +39,13 @@ def login():
             return response
         else:
             return jsonify({
-                "message": "User not found!" 
+                "msg": "Username or password is incorrect. Or isn't registered"
             }), 401
 
 
 # token in cookies
 @loginApi.route("/api/user", methods=['GET'])
-@jwt_required(locations=['cookies','headers'])
+@jwt_required(locations='cookies')
 def user():
     current_user = get_jwt_identity()
     return jsonify(current_user), 200
@@ -61,7 +61,7 @@ def signup():
         if Query.fetch_user_signup(username=username, email=None):
             if Query.fetch_user_signup(username=None, email=email):
                 userData= Query.insert_user(username,password,email)
-                
+
                 print(userData)
                 access_token = create_access_token(identity={
                     'id_user': userData[0],
@@ -78,20 +78,20 @@ def signup():
                 })
 
                 set_access_cookies(response, access_token)
-                return response
+                return response, 200
 
             else:
                 return jsonify({
-                "message": "Your email is registered"
+                "msg": "Your email is registered"
             }), 401
         else:
             return jsonify({
-                "message": "Your username is registered"
+                "msg": "Your username is registered"
             }), 401
 
 # Logout Route
 @loginApi.route("/api/logout", methods=['POST'])
 def logout():
-    response = jsonify({"message": "Logout Successful"})
+    response = jsonify({"msg": "Logout Successful"})
     unset_jwt_cookies(response)
     return response

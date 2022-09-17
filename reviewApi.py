@@ -9,7 +9,7 @@ from main import jwt
 reviewApi = Blueprint('reviewApi', __name__, template_folder='app/templates')
 
 @reviewApi.route('/api/reviews/', methods=['GET','POST'])
-@jwt_required(locations=['cookies','headers'])
+@jwt_required(locations='cookies')
 def reviews(id):
     id_user = get_jwt_identity()['id_user']
     if id_user == None:
